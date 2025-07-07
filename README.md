@@ -22,6 +22,10 @@ pip install ipywidgets openai google-generativeai requests nbformat
 
 ## Usage
 
+There are two ways to interact with the models:
+
+### Chat widget
+
 Create a notebook and instantiate the chat UI with your provider of choice:
 
 ```python
@@ -34,4 +38,21 @@ provider = OpenAIProvider()
 chat = LLMChat(provider)
 ```
 
-Try editing any message in the conversation; the history stored by the widget will be updated so future replies take those edits into account. See `examples/chat_example.ipynb` for a minimal working notebook.
+Try editing any message in the conversation; the history stored by the widget will be updated so future replies take those edits into account.
+
+### Chat cell
+
+Load the IPython extension and create cells starting with `%%chat`:
+
+```python
+%load_ext llm_notebook_ui.magics
+```
+
+```python
+%%chat
+What is the capital of France?
+```
+
+The response appears in an editable text area. Edits are stored in the conversation context so the next `%%chat` cell uses your modified text.
+
+See `examples/chat_example.ipynb` for a minimal working notebook.
