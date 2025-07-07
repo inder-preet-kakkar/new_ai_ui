@@ -32,6 +32,7 @@ class OpenAIProvider(LLMProvider):
     """Use OpenAI's ChatGPT API."""
 
     def __init__(self, model: str = "gpt-3.5-turbo", api_key: str | None = None):
+        """Create a provider for OpenAI's chat models."""
         if openai is None:
             raise RuntimeError("openai package is required for OpenAIProvider")
         self.model = model
@@ -41,6 +42,7 @@ class OpenAIProvider(LLMProvider):
         openai.api_key = self.api_key
 
     def generate(self, messages: List[Message]) -> str:
+        """Return the assistant reply for ``messages`` using ChatGPT."""
         response = openai.chat.completions.create(model=self.model, messages=messages)
         return response.choices[0].message.content
 
@@ -49,6 +51,7 @@ class GeminiProvider(LLMProvider):
     """Use Google's Gemini API."""
 
     def __init__(self, model: str = "gemini-pro", api_key: str | None = None):
+        """Use Google's Gemini API to generate text."""
         if genai is None:
             raise RuntimeError("google-generativeai package is required for GeminiProvider")
         self.model = model
@@ -59,7 +62,8 @@ class GeminiProvider(LLMProvider):
         self._model = genai.GenerativeModel(self.model)
 
     def generate(self, messages: List[Message]) -> str:
-        # Convert messages to text conversation for gemini
+        """Generate a reply for ``messages`` using Gemini."""
+        # Convert messages to a single text conversation string
         parts = []
         for m in messages:
             role = m.get("role")
@@ -77,10 +81,12 @@ class OllamaProvider(LLMProvider):
     """Use a local Ollama instance."""
 
     def __init__(self, model: str = "llama2", host: str = "http://localhost:11434"):  # pragma: no cover - network
+        """Use a local Ollama instance running on ``host``."""
         self.model = model
         self.host = host.rstrip("/")
 
     def generate(self, messages: List[Message]) -> str:
+        """Generate a reply from the local Ollama model."""
         prompt = "\n".join(m["content"] for m in messages)
         url = f"{self.host}/api/generate"
         resp = requests.post(url, json={"model": self.model, "prompt": prompt})

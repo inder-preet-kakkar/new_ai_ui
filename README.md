@@ -55,4 +55,6 @@ What is the capital of France?
 
 The response appears in an editable text area. Edits are stored in the conversation context so the next `%%chat` cell uses your modified text.
 
+If widgets cannot be rendered in your environment, the output falls back to Markdown text which you can edit manually before running the next chat cell.
+
 See `examples/chat_example.ipynb` for a minimal working notebook.
